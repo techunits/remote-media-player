@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html ng-app="playerApp">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <link rel="icon" href="/player/images/player.png" type="image/png" />
+        <title>EUTECH Remote Audio Player</title>
+        <link rel="stylesheet" href="/player/css/bootstrap.min.css" type="text/css" />
+        <link rel="stylesheet" href="/player/css/font-awesome.min.css" type="text/css" />
+        <link rel="stylesheet" href="/player/css/player.css" type="text/css" />
+        <script type="text/javascript" src="/player/js/jquery.min.js"></script>
+        <script type="text/javascript" src="/player/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="/player/js/angular.min.js"></script>
+        <script type="text/javascript" src="/player/js/player.js"></script>
+    </head>
+
+    <body ng-controller="PlayerCtrl">
+        <section class="wrapper">
+            <section class="player-wrapper">
+                <figure class="col-xs-3  col-sm-3  col-md-3 thumb">
+
+                </figure>
+                <aside class="col-xs-9  col-sm-9  col-md-9  metainfo">
+                    <h3 class="song-title">{{audio.title}}</h3>
+                    <p>Artist: {{audio.title}}</p>
+                    <p>Album: {{audio.title}}</p>
+                    <p>Duration: {{audio.duration}}</p>
+                </aside>
+                <div class="clearfix"></div>
+                <ul class="action-btns hidden-xs">
+                    <li class="pull-left  prev" ng-click="prev();">
+                        <i class="glyphicon glyphicon-fast-backward"></i>
+                    </li>
+                    <li class="pull-left  backward" ng-click="seekBackward();">
+                        <i class="glyphicon glyphicon-backward"></i>
+                    </li>
+                    <li class="pull-left  play" ng-click="play(currentAudioId);" ng-hide="'PLAYING' == player.status">
+                        <i class="glyphicon glyphicon-play"></i>
+                    </li>
+                    <li class="pull-left  pause" ng-click="pause();" ng-show="'PLAYING' == player.status">
+                        <i class="glyphicon glyphicon-pause"></i>
+                    </li>
+                    <li class="pull-left  stop" ng-click="stop()" ng-show="'PLAYING' == player.status">
+                        <i class="glyphicon glyphicon-stop"></i>
+                    </li>
+                    <li class="pull-left  forward" ng-click="seekForward();">
+                        <i class="glyphicon glyphicon-forward"></i>
+                    </li>
+                    <li class="pull-left  next" ng-click="next();">
+                        <i class="glyphicon glyphicon-fast-forward"></i>
+                    </li>
+                    <li class="pull-right  stop" ng-click="loadPlaylist()">
+                        <i class="glyphicon glyphicon-th-list"></i>
+                    </li>
+                </ul>
+                <ul class="action-btns visible-xs">
+                    <li class="pull-left  prev" ng-click="prev();">
+                        <i class="glyphicon glyphicon-fast-backward"></i>
+                    </li>
+                    <li class="pull-left  play" ng-click="play(currentAudioId);" ng-hide="'PLAYING' == player.status">
+                        <i class="glyphicon glyphicon-play"></i>
+                    </li>
+                    <li class="pull-left  pause" ng-click="pause();" ng-show="'PLAYING' == player.status">
+                        <i class="glyphicon glyphicon-pause"></i>
+                    </li>
+                    <li class="pull-left  next" ng-click="next();">
+                        <i class="glyphicon glyphicon-fast-forward"></i>
+                    </li>
+                    <li class="pull-right  stop" ng-click="loadPlaylist()">
+                        <i class="glyphicon glyphicon-th-list"></i>
+                    </li>
+                </ul>
+            </section>
+            <div class="clearfix"></div>
+
+            <section class="playlist-wrapper" ng-show="playlist">
+                <ul class="playlist">
+                    <li class="playlist-item" data-audio-id="{{aidx}}" ng-repeat="(aidx, audio) in playlist">
+                        <div class="col-xs-9  col-sm-9  col-md-10">
+                            <i class="glyphicon glyphicon-music"></i>&nbsp;&nbsp;{{audio.title}}
+                        </div>
+                        <div class="col-xs-3  col-sm-3  col-md-2">
+                            <span class="pull-right  play" ng-click="play(aidx);">
+                                <i class="glyphicon glyphicon-play"></i>
+                            </span>
+                            <span class="pull-right  pause  none" ng-click="pause();">
+                                <i class="glyphicon glyphicon-pause"></i>
+                            </span>
+                        </div>
+                        <div class="clearfix"></div>
+                    </li>
+                </ul>
+            </section>
+        </section>
+    </body>
+
+</html>

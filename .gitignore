@@ -79,7 +79,7 @@ celerybeat-schedule
 .env
 
 # virtualenv
-venv/
+menv/
 ENV/
 
 # Spyder project settings
@@ -87,3 +87,11 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+# DB files
+*.json
+*.db
+*.sqlite3
+
+# resource files
+resources/
