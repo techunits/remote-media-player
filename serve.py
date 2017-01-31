@@ -1,18 +1,12 @@
 import cherrypy
 import os
 
-from lib.mplayer import MPlayer
 from views.album import AlbumViewSet
 from views.audio import AudioViewSet, AudioInfoViewSet
 from lib.media.audio import refreshAudioFiles
 
-audio_path = '/home/skall/Projects/RnD/mediaserv/resources/'
-#audio_path = '/media/wd-external-1tb/Backup/Media/Entertainment/audio/'
-
-# load mplayer functions
-global mpObj
-MPlayer.populate()
-mpObj = MPlayer()
+#audio_path = '/home/skall/Projects/RnD/mediaserv/resources/'
+audio_path = '/media/wd-external-1tb/Backup/Media/Entertainment/audio/'
 
 class Index:
     @cherrypy.expose
@@ -28,7 +22,8 @@ if __name__ == '__main__':
     # connect to  database
     #conn = sqlite3.connect('pyaudioplayer.db.sqlite3')
     #cursor = conn.cursor()
-    audioFiles = refreshAudioFiles(path=audio_path)
+    # refresh audio files
+    #audioFiles = refreshAudioFiles(path=audio_path)
     
     mapper = cherrypy.dispatch.RoutesDispatcher()
     mapper.connect('index', '/', controller=Index())

@@ -1,6 +1,8 @@
 ul, ol, li {
     list-style-type: none;
     list-style: none;
+    margin: 0px;
+    padding: 0px;
 }
 .clearfix {
     margin: 0px;
@@ -10,11 +12,13 @@ ul, ol, li {
 .none {
     display: none;
 }
+body {
+    font-family: 'Open Sans', sans-serif;
+}
 .wrapper {
     max-width: 650px;
     min-width: 300px;
     width: 90%;
-    min-height: 250px;
     border: 1px solid #DADADA;
     margin: 0 auto;
     margin-top: 10%;
@@ -23,18 +27,27 @@ ul, ol, li {
 }
 
 .player-wrapper .thumb {
-    border: 1px solid #DADADA;
-    background: #EEE;
+    background: rgba(238, 238, 238, 0.30);
     height: 120px;
+    text-align: center;
+    padding: 15px;
+}
+.player-wrapper .thumb img {
+    max-width: 100px;
+    max-height: 100px;
 }
 .player-wrapper  .metainfo  p {
     margin-bottom: 4px;
+    font-size: 12px;
+    color: grey;
 }
 .player-wrapper  .song-title {
     margin-top: 0px;
-    font-size: 15px;
+    font-size: 20px;
     font-weight: bold;
     margin-bottom: 15px;
+    font-family: 'Oswald', sans-serif;
+    letter-spacing: 1px;
 }
 .player-wrapper  .action-btns {
     margin-top: 15px;
@@ -66,4 +79,13 @@ ul, ol, li {
 }
 .playlist-wrapper  ul.playlist  li.playlist-item:hover {
     cursor: pointer;
+}
+.playlist-wrapper  ul.playlist  li.current-item {
+    background: rgba(223, 223, 223, 0.40);
+}
+.playlist-wrapper  ul.playlist  li.current-item  span.play {
+    display: none;
+}
+.playlist-wrapper  ul.playlist  li.current-item  span.pause {
+    display: block;
 }

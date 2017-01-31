@@ -5,7 +5,13 @@ playerApp.controller('PlayerCtrl', function($scope, $http) {
     $scope.player = {
         'status': false
     };
+
     
+    $scope.highlightPlaylistItem = function(id) {
+        //  select correct item on the playlist
+        $('ul.playlist  li').removeClass('current-item');
+        $('ul.playlist  li[data-audio-id="'+id+'"]').addClass('current-item');
+    };
 
     $scope.getAudioMetaInfo = function(id) {
         var endpoint = '/audios/' + id + '/';
@@ -24,14 +30,12 @@ playerApp.controller('PlayerCtrl', function($scope, $http) {
             alert('Sorry!!! Can\'t this load audio info');
         });
     };
-    //  load first media info
-    $scope.getAudioMetaInfo($scope.currentAudioId);
 
+    //  load first audio info on pageload
+    $scope.getAudioMetaInfo($scope.currentAudioId);
+    
     $scope.play = function(id) {
         $scope.currentAudioId = id;
-
-        //  load audio info
-        $scope.getAudioMetaInfo(id);
 
         //  start playing audio
         var endpoint = '/songs/' + $scope.currentAudioId + '/play/';
@@ -41,6 +45,13 @@ playerApp.controller('PlayerCtrl', function($scope, $http) {
         })
         .then(function successCallback() {
             $scope.player.status = 'PLAYING';
+
+            //  highlight playlist song which is now playing
+            $scope.highlightPlaylistItem($scope.currentAudioId);
+
+            //  load first media info
+            $scope.getAudioMetaInfo($scope.currentAudioId);
+
         }, function() {
             alert('Sorry!!! Can\'t this play audio');
         });
@@ -116,7 +127,6 @@ playerApp.controller('PlayerCtrl', function($scope, $http) {
             url: endpoint
         })
         .then(function successCallback(response) {
-            console.log(response.data.songs);
             $scope.playlist = response.data.audios;
         }, function() {
             alert('Sorry!!! Can\'t load audio playlist');
