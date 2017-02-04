@@ -8,7 +8,6 @@
         <link rel="icon" href="/player/images/player.png" type="image/png" />
         <title>EUTECH Remote Audio Player</title>
         <link rel="stylesheet" href="/player/css/bootstrap.min.css" type="text/css" />
-        <link rel="stylesheet" href="/player/css/font-awesome.min.css" type="text/css" />
         <link rel="stylesheet" href="/player/css/player.css" type="text/css" />
         <script type="text/javascript" src="/player/js/jquery.min.js"></script>
         <script type="text/javascript" src="/player/js/bootstrap.min.js"></script>
@@ -24,9 +23,12 @@
                 </figure>
                 <aside class="col-xs-9  col-sm-9  col-md-9  metainfo">
                     <h3 class="song-title">{{audio.title}}</h3>
-                    <p>Artist: {{audio.title}}</p>
-                    <p>Album: {{audio.title}}</p>
+                    <p>Artist: {{audio.artist}}</p>
+                    <p>Album: {{audio.album}}</p>
                     <p>Duration: {{audio.duration}}</p>
+                    <select ng-model="volIdx" ng-change="volume();">
+                        <option value="{{vol}}" ng-repeat="vol in volumes">{{vol}}%</option>
+                    </select>
                 </aside>
                 <div class="clearfix"></div>
                 <ul class="action-btns hidden-xs">
@@ -81,12 +83,12 @@
                 </form>
                 <div class="clearfix"></div>
                 <ul class="playlist">
-                    <li class="playlist-item" data-audio-id="{{aidx}}" ng-repeat="(aidx, audio) in playlist | filter:name">
+                    <li class="playlist-item" data-audio-id="{{audio.id}}" ng-repeat="audio in playlist | filter:name">
                         <div class="col-xs-9  col-sm-9  col-md-10">
-                            <i class="glyphicon glyphicon-music"></i>&nbsp;&nbsp;{{audio.title}}
+                            <i class="glyphicon glyphicon-music"></i>&nbsp;&nbsp;{{audio.album}} - {{audio.title}}
                         </div>
                         <div class="col-xs-3  col-sm-3  col-md-2">
-                            <span class="pull-right  play" ng-click="play(aidx);">
+                            <span class="pull-right  play" ng-click="play(audio.id);">
                                 <i class="glyphicon glyphicon-play"></i>
                             </span>
                             <span class="pull-right  pause  none" ng-click="pause();">

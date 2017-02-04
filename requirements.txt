@@ -1,12 +1,16 @@
 appdirs==1.4.0
+argh==0.26.2
 cheroot==5.1.0
 CherryPy==10.0.0
 eyeD3==0.7.10
 packaging==16.8
+pathtools==0.1.2
 portend==1.8
 pyparsing==2.1.10
 pytz==2016.10
+PyYAML==3.12
 repoze.lru==0.6
 Routes==2.4.1
 six==1.10.0
 tempora==1.6.1
+watchdog==0.8.3

@@ -1,12 +1,19 @@
 import cherrypy
 import os
-
+import time
+from watchdog.observers import Observer  
+from lib.config import RemoteAudioPlayerConfig
 from views.album import AlbumViewSet
 from views.audio import AudioViewSet, AudioInfoViewSet
-from lib.media.audio import refreshAudioFiles
+from lib.media.watcher import MediaDiskWatchThread, MediaFileManagerThread
 
-#audio_path = '/home/skall/Projects/RnD/mediaserv/resources/'
-audio_path = '/media/wd-external-1tb/Backup/Media/Entertainment/audio/'
+# bootstrap remote media player config
+rapbObj = RemoteAudioPlayerConfig(inipath = 'remoteaudioplayer.conf')
+rapbObj.bootstrap()
+
+# determine audio_path
+audio_path = rapbObj.get(section='media', key='path')
+MediaFileManagerThread(path=audio_path).start()
 
 class Index:
     @cherrypy.expose
@@ -19,23 +26,32 @@ class Index:
 
 
 if __name__ == '__main__':
-    # connect to  database
-    #conn = sqlite3.connect('pyaudioplayer.db.sqlite3')
-    #cursor = conn.cursor()
-    # refresh audio files
-    #audioFiles = refreshAudioFiles(path=audio_path)
+    # start media watchdog to monitor filesystem change events
+    print "Starting Media Watchdog: {}".format(audio_path)
+    observer = Observer()
+    observer.schedule(MediaDiskWatchThread(), path=audio_path, recursive=True)
+    observer.start()
     
+    # map cherrypy access urls
     mapper = cherrypy.dispatch.RoutesDispatcher()
     mapper.connect('index', '/', controller=Index())
+    mapper.connect('status', '/status/', controller=AlbumViewSet(), action='status')
     mapper.connect('albums', '/albums/', controller=AlbumViewSet(), action='index')
     mapper.connect('songs', '/songs/', controller=AudioViewSet(), action='index')
     mapper.connect('audio-info', '/audios/{id}/', controller=AudioInfoViewSet(), action='index')
     mapper.connect('play', '/songs/{id}/play/', controller=AudioViewSet(), action='play')
     mapper.connect('pause', '/songs/pause/', controller=AudioViewSet(), action='pause')
     mapper.connect('stop', '/songs/stop/', controller=AudioViewSet(), action='stop')
+    mapper.connect('volume', '/songs/volume/{idx}/', controller=AudioViewSet(), action='volume')
     mapper.connect('seek-forward', '/songs/seek/forward/', controller=AudioViewSet(), action='seekForward')
     mapper.connect('seek-backward', '/songs/seek/backward/', controller=AudioViewSet(), action='seekBackward')
 
+    # set environment as production
+    cherrypy.config.update({
+        'global': {
+            'environment' : 'production'
+        }
+    })
 
     application = cherrypy.tree.mount(None, config={
         "/": {
@@ -47,9 +63,7 @@ if __name__ == '__main__':
         }
     })
 
-    cherrypy.server.socket_host = "0.0.0.0"
-    cherrypy.server.socket_port = 8989
-    cherrypy.server.thread_pool = 10
+    cherrypy.server.socket_host = rapbObj.get(section='daemon', key='bind_ip')
+    cherrypy.server.socket_port = int(rapbObj.get(section='daemon', key='port'))
+    cherrypy.server.thread_pool = int(rapbObj.get(section='daemon', key='threads'))
     cherrypy.quickstart(application)
-
-

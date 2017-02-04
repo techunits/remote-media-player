@@ -1,7 +1,9 @@
 var playerApp = angular.module('playerApp', []);
 
 playerApp.controller('PlayerCtrl', function($scope, $http) {
-    $scope.currentAudioId = 0;
+    $scope.currentAudioId = 1;
+    $scope.volIdx = '50';
+    $scope.volumes = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100];
     $scope.player = {
         'status': false
     };
@@ -80,6 +82,19 @@ playerApp.controller('PlayerCtrl', function($scope, $http) {
             $scope.player.status = 'STOPPED';
         }, function() {
             alert('Sorry!!! Can\'t this stop audio');
+        });
+    };
+
+    $scope.volume = function() {
+        var endpoint = '/songs/volume/' + $scope.volIdx + '/';
+        $http({
+            method: 'GET',
+            url: endpoint
+        })
+        .then(function successCallback() {
+            $scope.player.status = 'PLAYING';
+        }, function() {
+            alert('Sorry!!! Can\'t this set audio volume');
         });
     };
 
